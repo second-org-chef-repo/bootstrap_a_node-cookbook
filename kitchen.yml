@@ -1,0 +1,96 @@
+---
+driver:  
+  name: dokken
+
+transport:
+  name: dokken
+
+provisioner:
+  name: dokken
+  product_name: chef
+  product_version: latest
+
+verifier:
+  name: inspec
+
+suites:
+  - name: default
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+
+platforms:
+  - name: centos-8
+    driver:
+      image: dokken/centos-8
+      tag: latest
+      privileged: true
+      pid_one_command: /usr/lib/systemd/systemd
+  - name: centos-7
+    driver:
+      image: dokken/centos-7
+      tag: latest
+      privileged: true
+      pid_one_command: /sbin/init
+  - name: ubuntu-20.04
+    driver:
+      image: dokken/ubuntu-20.04
+      tag: latest
+      privileged: true
+      pid_one_command: /bin/systemd
+
+lifecycle:
+  pre_converge:
+    - remote: | 
+        apt update
+      excludes:
+        - centos-7
+        - centos-8
+    - remote: | 
+        yum update
+      excludes:
+        - ubuntu-20.04
+        - centos-8
+    - remote: | 
+        dnf update
+      excludes:
+        - ubuntu-20.04
+        - centos-7
+        
+###################################
+# ---
+# driver:
+#   name: vagrant
+
+# provisioner:
+#   name: chef_zero
+
+# verifier:
+#   name: inspec
+
+# suites:
+#   - name: default
+#     run_list:
+#       - recipe[bootstrap_a_node::default]
+#     verifier:
+#       inspec_tests:
+#         - test/integration/default
+#     attributes:
+
+# platforms:
+#   - name: ubuntu-20.04
+#   - name: centos-8
+#   - name: centos-7
+
+# lifecycle:
+#   pre_converge:
+#     - remote: | 
+#         apt update
+#       excludes:
+#         - centos-7
+#         - centos-8
+#     - remote: | 
+#         yum update
+#       excludes:
+#         - ubuntu-20.04
