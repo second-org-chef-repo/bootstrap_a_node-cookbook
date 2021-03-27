@@ -1,0 +1,17 @@
+DEPENDENCIES
+  bootstrap_a_node
+    path: .
+    metadata: true
+
+GRAPH
+  bootstrap_a_node (3.0.0)
+    chef-client (>= 0.0.0)
+    chef_client_updater (>= 0.0.0)
+    slack_handler (>= 0.0.0)
+  chef-client (12.3.3)
+    cron (>= 4.2.0)
+    logrotate (>= 1.9.0)
+  chef_client_updater (3.11.1)
+  cron (6.4.0)
+  logrotate (2.3.0)
+  slack_handler (1.0.0)

@@ -85,7 +85,7 @@ test/*
 
 # Berkshelf #
 #############
-Berksfile
+#Berksfile
 Berksfile.lock
 cookbooks/*
 tmp
