@@ -5,9 +5,9 @@ license 'All Rights Reserved'
 description 'Installs/Configures bootstrap_a_node'
 version '3.0.0'
 chef_version '>= 16.0'
-depends 'slack_handler'
-depends 'chef_client_updater'
-depends 'chef-client'
+depends 'slack_handler', '=1.0.0'
+depends 'chef_client_updater', '=3.11.1'
+depends 'chef-client', '=12.3.3'
 
 # The `issues_url` points to the location where issues for this cookbook are
 # tracked.  A `View Issues` link will be displayed on this cookbook's page when
