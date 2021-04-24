@@ -12,8 +12,6 @@ chef_client_config 'client.rb' do
   chef_server_url "https://#{node['bootstrap_a_node']['chef_server']['fqdn']}/organizations/#{node['bootstrap_a_node']['org_name']}"
   chef_license 'accept'
   log_location 'STDOUT'
-  policy_name "#{node['bootstrap_a_node']['policy_name']}"
-  policy_group "#{node['bootstrap_a_node']['policy_group']}"
   additional_config "environment \"#{node['bootstrap_a_node']['environment']}\"\nvalidation_key \"/etc/chef/#{node['bootstrap_a_node']['org_validation_key_file']}\"\ntrusted_certs_dir \"/etc/chef/trusted_certs\""
 end
 
@@ -22,23 +20,15 @@ directory '/etc/chef/trusted_certs' do
 end
 
 cookbook_file 'Place SSL certificate to /etc/chef/trusted_certs' do
-  source "#{node['bootstrap_a_node']['chef_server']['fqdn']}.crt"
+  source "automate.cl.crt"
   mode '644'
   owner 'root'
-  path "/etc/chef/trusted_certs/#{node['bootstrap_a_node']['chef_server']['fqdn']}.crt"
+  path "/etc/chef/trusted_certs/automate.cl.crt"
 end
 
 ###########
 # Create client.pem and delete org-validator after first CCR
 ###########
-
-ruby_block 'edit etc hosts' do
-  block do
-    rc = Chef::Util::FileEdit.new('/etc/hosts')
-    rc.insert_line_if_no_match(/#{node['bootstrap_a_node']['chef_server']['fqdn']}/, "#{node['bootstrap_a_node']['chef_server']['ipaddress']} #{node['bootstrap_a_node']['chef_server']['fqdn']}")
-    rc.write_file
-  end
-end
 
 cookbook_file "Place validator key for Org:#{node['bootstrap_a_node']['org_name']}" do
   not_if { ::File.exist?('/etc/chef/client.pem') }
